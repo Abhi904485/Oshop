@@ -1,0 +1,7 @@
+{
+  "tslint.autoFixOnSave": true,
+  "tslint.enable": true,
+  "tslint.configFile": "D:\\Projects\\Angular Projects\\Oshop\\tslint.json",
+  "editor.autoClosingBrackets": "always",
+  "editor.autoClosingQuotes": "always"
+}
