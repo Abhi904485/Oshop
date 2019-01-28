@@ -1,30 +1,55 @@
 <p>
   <a routerLink="/admin/products/new" class="btn btn-primary">New Product</a>
 </p>
-<p>
-  <input
-    #query
-    (keyup)="filter(query.value)"
-    type="text"
-    class="form-control"
-    placeholder="Search ... "
-  />
-</p>
 
-<table id="datatable" class="table table-striped table-bordered" style="width:100%">
-  <thead>
-      <tr>
-          <th>Ttile</th>
-          <th>Price</th>
-          <th></th>
+<mat-form-field>
+  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search ......">
+</mat-form-field>
 
-      </tr>
-  </thead>
-  <tbody>
-      <tr *ngFor="let p of filteredProducts">
-        <td>{{ p.title }}</td>
-        <td>{{ p.price }}</td>
-        <td><a [routerLink]="['/admin/products/', p.key]">Edit </a></td>
-      </tr>
-  </tbody>
-</table>
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <!-- Title Column -->
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Title</th>
+      <td mat-cell *matCellDef="let row"> {{row.title}} </td>
+    </ng-container>
+
+    <!-- Price Column -->
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Price</th>
+      <td mat-cell *matCellDef="let row"> {{row.price}}</td>
+    </ng-container>
+
+    <!-- Edit column -->
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+      <td mat-cell *matCellDef="let row"><a [routerLink]="['/admin/products/', row.key]">Edit</a></td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</div>
+
+
+<!--<table id="datatable" class="table table-striped table-bordered" style="width:100%">-->
+<!--<thead>-->
+<!--<tr>-->
+<!--<th>Ttile</th>-->
+<!--<th>Price</th>-->
+<!--<th></th>-->
+
+<!--</tr>-->
+<!--</thead>-->
+<!--<tbody>-->
+<!--<tr *ngFor="let p of filteredProducts">-->
+<!--<td>{{ p.title }}</td>-->
+<!--<td>{{ p.price }}</td>-->
+<!--<td><a [routerLink]="['/admin/products/', p.key]">Edit </a></td>-->
+<!--</tr>-->
+<!--</tbody>-->
+<!--</table>-->

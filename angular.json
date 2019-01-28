@@ -85,10 +85,7 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": [
-              "./node_modules/datatables.net/js/jquery.dataTables.js",
-              "./node_modules/jquery/dist/jquery.js"
-            ],
+            "scripts": [],
             "assets": [
               "src/favicon.ico",
               "src/assets"

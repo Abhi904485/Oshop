@@ -1,48 +1,48 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  ViewChild,
-  ElementRef
-} from "@angular/core";
-import { ProductService } from "src/app/product.service";
-import { Subscription } from "rxjs";
-import * as $ from "jquery";
-import "datatables.net";
-import "datatables.net-bs4";
-import { Product } from "src/app/models/app-product";
+import {ProductService} from "src/app/product.service";
+import {Subscription} from "rxjs";
+import {MatPaginator, MatSort, MatTableDataSource} from "@angular/material";
+import {Product} from "src/app/models/app-product";
+import {Component, OnDestroy, ViewChild} from "@angular/core";
+
 @Component({
   selector: "app-admin-products",
   templateUrl: "./admin-products.component.html",
   styleUrls: ["./admin-products.component.scss"]
 })
-export class AdminProductsComponent implements OnInit, OnDestroy {
-  @ViewChild("datatable") table: ElementRef;
-  dataTable: any;
+export class AdminProductsComponent implements OnDestroy {
   allProducts: Product[];
   subscribtion: Subscription;
   filteredProducts: any[];
+  displayedColumns: string[] = ["title", "price", "edit"];
+  dataSource: MatTableDataSource<Product>;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
+
   constructor(private productService: ProductService) {
     this.subscribtion = this.productService
       .getAll()
       .subscribe(
-        products => (this.filteredProducts = this.allProducts = products)
+        products => {
+          this.filteredProducts = this.allProducts = products;
+          this.dataSource = new MatTableDataSource(products);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        }
       );
   }
 
-  ngOnInit() {
-    this.dataTable = $(this.table.nativeElement);
-    this.dataTable.dataTable();
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = (filterValue.trim().length > 0) ? filterValue.trim().toLowerCase() : this.dataSource.filter;
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
-  filter(query: string) {
-    this.filteredProducts = query
-      ? this.allProducts.filter(product =>
-          product.title.toLowerCase().includes(query.toLowerCase())
-        )
-      : this.allProducts;
-  }
   ngOnDestroy(): void {
     this.subscribtion.unsubscribe();
   }
+
 }
