@@ -34,9 +34,9 @@ export class AdminProductsComponent implements OnDestroy {
   }
 
   applyFilter(filterValue: string) {
-    this.dataSource.filter = (filterValue.trim().length > 0) ? filterValue.trim().toLowerCase() : this.dataSource.filter;
-
+    this.dataSource.filter = filterValue.trim().toLowerCase();
     if (this.dataSource.paginator) {
+      console.log(this.dataSource.paginator)
       this.dataSource.paginator.firstPage();
     }
   }

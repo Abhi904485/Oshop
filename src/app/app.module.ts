@@ -43,6 +43,7 @@ import {ProductFormComponent} from "./admin/product-form/product-form.component"
 import {CategoryService} from "./category.service";
 import {CustomFormsModule} from "ng2-validation";
 import {HttpClientModule} from "@angular/common/http";
+import { ProductFilterComponent } from './products/product-filter/product-filter.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import {HttpClientModule} from "@angular/common/http";
     AdminProductsComponent,
     AdminOrdersComponent,
     LoginComponent,
-    ProductFormComponent
+    ProductFormComponent,
+    ProductFilterComponent
   ],
   imports: [
     BrowserModule,
