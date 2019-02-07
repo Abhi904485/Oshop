@@ -1,54 +1,50 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ProductService } from "../product.service";
-import { Product } from "../models/app-product";
-import { Observable, Subscription } from "rxjs";
-import { CategoryService } from "../category.service";
-import { ActivatedRoute } from "@angular/router";
-import { ShoppingCartService } from "../shopping-cart.service";
+import {Component, OnInit} from "@angular/core";
+import {ProductService} from "../product.service";
+import {Product} from "../models/app-product";
+import {Observable} from "rxjs";
+import {CategoryService} from "../category.service";
+import {ActivatedRoute} from "@angular/router";
+import {ShoppingCartService} from "../shopping-cart.service";
+import {ShoppingCart} from "../models/shopping-cart";
+import {switchMap} from "rxjs/operators";
+
 @Component({
   selector: "app-products",
   templateUrl: "./products.component.html",
   styleUrls: ["./products.component.scss"]
 })
-export class ProductsComponent implements OnInit, OnDestroy {
-  allCategories$: Observable<any[]>;
+export class ProductsComponent implements OnInit {
   allProduct: Product[] = [];
   allFilteredProducts: Product[] = [];
   category: string;
-  subscribtion: Subscription;
-  cart: any;
+  cart$: Observable<ShoppingCart>;
+
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
     private categoryService: CategoryService,
     private shoppingCartService: ShoppingCartService
   ) {
-    this.productService.getAll().subscribe(products => {
-      this.allProduct = products;
-      this.route.queryParamMap.subscribe(params => {
-        this.category = params.get("category");
-        this.allFilteredProducts = this.category
-          ? this.allProduct.filter(
-              product => product.category === this.category
-            )
-          : this.allProduct;
-      });
-    });
-    this.allCategories$ = this.categoryService.getAll();
+
   }
 
   async ngOnInit() {
-    this.subscribtion = (await this.shoppingCartService.getCart()).subscribe(
-      items => {
-        this.cart = items;
-        // console.log(items.itemsMap);
-      }
-    );
+    this.cart$ = await this.shoppingCartService.getCart();
+    this.populateProducts();
   }
 
-  ngOnDestroy(): void {
-    this.subscribtion.unsubscribe();
+  private applyFilter() {
+    this.allFilteredProducts = (this.category) ? this.allProduct.filter(p => p.category === this.category) : this.allProduct;
+  }
+
+  private populateProducts() {
+    this.productService.getAll().pipe(switchMap(products => {
+      this.allProduct = products;
+      return this.route.queryParamMap;
+    })).subscribe(params => {
+      this.category = params.get("category");
+      this.applyFilter();
+    });
   }
 }
 
-// ;

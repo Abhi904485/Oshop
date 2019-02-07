@@ -1,10 +1,10 @@
-import { Injectable } from "@angular/core";
-import { AngularFireDatabase } from "@angular/fire/database";
-import { Product } from "./models/app-product";
-import { take } from "rxjs/operators";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
-import { ShoppingCart } from "./models/shopping-cart";
+import {Injectable} from "@angular/core";
+import {AngularFireDatabase} from "@angular/fire/database";
+import {Product} from "./models/app-product";
+import {map, take} from "rxjs/operators";
+import {Observable} from "rxjs";
+import {ShoppingCart} from "./models/shopping-cart";
+
 @Injectable({
   providedIn: "root"
 })
@@ -43,11 +43,11 @@ export class ShoppingCartService {
   }
 
   async addToCart(product: Product) {
-    this.updateCart(product, 1);
+    await this.updateCart(product, 1);
   }
 
   async removeFromCart(product: Product) {
-    this.updateCart(product, -1);
+    await this.updateCart(product, -1);
   }
 
   async updateCart(product: Product, change: number) {

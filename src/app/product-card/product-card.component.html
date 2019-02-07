@@ -1,15 +1,15 @@
 <div *ngIf="product.title" class="card">
   <img
+    *ngIf="product.imageUrl"
+    alt="{{ product.title }}"
     class="card-img-top"
     src="{{ product.imageUrl }}"
-    alt="{{ product.title }}"
-    *ngIf="product.imageUrl"
   />
   <div class="card-body">
     <h5 class="card-title">{{ product.title }}</h5>
     <p class="card-text">{{ product.price | currency: "USD" }}</p>
   </div>
-  <div class="card-footer" *ngIf="showActions && shoppingCart">
+  <div *ngIf="showActions && shoppingCart " class="card-footer">
     <button
       *ngIf="shoppingCart.getQuantity(product) == 0; else updateQuantity"
       (click)="addToCart(product)"
